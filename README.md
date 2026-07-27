@@ -16,7 +16,7 @@ The application includes:
 ## Group Members
 
 - Hadi Zan
-- [Group Member Name]
+- Rifqy
 
 ## System Architecture
 
