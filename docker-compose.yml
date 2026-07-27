@@ -3,31 +3,44 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-
     ports:
       - "3000:3000"
-
     volumes:
       - ./frontend:/app
       - /app/node_modules
-
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-
+    depends_on:
+      - backend
     stdin_open: true
     tty: true
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    environment:
+      - PORT=5000
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
 
   tests:
     build:
       context: ./frontend
       dockerfile: Dockerfile.dev
-
     volumes:
       - ./frontend:/app
       - /app/node_modules
-
     environment:
       - CI=true
-
     command: ["npm", "test", "--", "--watchAll=false"]
